@@ -1,6 +1,6 @@
 // Guarda a app em cache para funcionar sem internet.
 // Ao publicar alterações, subir a versão para os portáteis receberem a nova.
-const VERSION = 'v4';
+const VERSION = 'v5';
 const ASSETS = [
   './', 'index.html', 'manifest.webmanifest', 'css/app.css',
   'js/app.js', 'js/config.js', 'js/export.js', 'js/icons.js', 'js/model.js', 'js/pdf.js', 'js/photo.js', 'js/richtext.js',

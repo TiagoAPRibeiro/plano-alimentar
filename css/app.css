@@ -320,3 +320,6 @@ textarea:focus, .inline-field input:focus { outline: 2px solid rgba(124, 153, 14
 .meals-text:focus { outline: 2px solid rgba(124, 153, 140, .45); border-color: var(--sage-ac); }
 .meals-text::placeholder { color: #B5B9B7; font-style: italic; }
 .meals-actions { display: flex; justify-content: flex-end; margin-top: 8px; }
+
+.inline-field[hidden], .note[hidden] { display: none; }
+.share-note { margin: -2px 0 2px; }

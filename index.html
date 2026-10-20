@@ -46,12 +46,13 @@
           <textarea id="msg" rows="5"></textarea>
         </label>
 
-        <button type="button" class="btn primary wide" id="btn-share" hidden>Partilhar… <small>WhatsApp, Mail, AirDrop</small></button>
+        <button type="button" class="btn primary wide" id="btn-share" hidden>Enviar PDF… <small>WhatsApp, Mail, AirDrop</small></button>
+        <p class="note share-note" hidden>Escolha <b>WhatsApp</b> na lista: o PDF segue anexado e a mensagem fica copiada para colar na conversa com ⌘V.</p>
         <button type="button" class="btn wide" id="btn-download">Descarregar PDF</button>
 
         <div class="divider"><span>ou abrir a conversa</span></div>
 
-        <div class="inline-field">
+        <div class="inline-field wa-row">
           <input type="tel" id="phone" placeholder="Telemóvel (ex.: 912 345 678)" autocomplete="off">
           <button type="button" class="btn" id="btn-whatsapp">WhatsApp</button>
         </div>
@@ -59,7 +60,7 @@
           <input type="email" id="email" placeholder="Email do cliente" autocomplete="off">
           <button type="button" class="btn" id="btn-email">Email</button>
         </div>
-        <p class="note">O WhatsApp e o email não deixam anexar ficheiros a partir de um site. O PDF é descarregado e basta arrastá-lo para a conversa.</p>
+        <p class="note fallback-note">Estas opções só levam a mensagem: o PDF é descarregado e é preciso arrastá-lo para a conversa ou para o email.</p>
         <p class="status" role="status"></p>
       </aside>
     </div>

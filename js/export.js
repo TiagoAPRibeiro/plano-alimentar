@@ -58,7 +58,11 @@ export async function openExport(state, done) {
     if (current) URL.revokeObjectURL(current.url);
     current = { blob, file, url: URL.createObjectURL(blob) };
     $('iframe').src = current.url + '#view=FitH';
-    $('#btn-share').hidden = !(navigator.canShare && navigator.canShare({ files: [file] }));
+    const share = canShareFile();
+    $('#btn-share').hidden = !share;
+    $('.share-note').hidden = !share;
+    $('.wa-row').hidden = share;
+    $('.divider span').textContent = share ? 'ou por email' : 'ou abrir a conversa';
   } catch (err) {
     console.error(err);
     setStatus('Ocorreu um erro ao gerar o PDF.');
@@ -72,19 +76,32 @@ dlg.addEventListener('click', e => { if (e.target === dlg) dlg.close(); });
 
 $('#btn-download').addEventListener('click', () => current && download());
 
-// O PDF já está pronto antes do clique, para não perder o "gesto" exigido pelo Safari.
-$('#btn-share').addEventListener('click', async () => {
-  if (!current) return;
+const canShareFile = () => !!(current && navigator.canShare && navigator.canShare({ files: [current.file] }));
+
+// Partilha só o ficheiro: com ficheiro + texto juntos, o WhatsApp para Mac envia apenas o texto.
+// A mensagem vai para a área de transferência, para colar na conversa.
+// O PDF já está pronto antes do clique e nada é aguardado antes do share(), para não perder
+// o "gesto" do utilizador exigido pelo Safari.
+async function shareFile() {
+  const msg = $('#msg').value.trim();
+  const copied = msg && navigator.clipboard ? navigator.clipboard.writeText(msg).then(() => true, () => false) : Promise.resolve(false);
   try {
-    await navigator.share({ files: [current.file], title: current.file.name, text: $('#msg').value });
+    await navigator.share({ files: [current.file] });
     onDone();
+    setStatus(await copied
+      ? 'PDF enviado. A mensagem foi copiada: cole-a na conversa com ⌘V.'
+      : 'PDF enviado.');
   } catch (err) {
-    if (err.name !== 'AbortError') setStatus('Não foi possível partilhar. Use as opções abaixo.');
+    if (err.name !== 'AbortError') setStatus('Não foi possível partilhar. Descarregue o PDF e arraste-o para a conversa.');
   }
-});
+}
+
+$('#btn-share').addEventListener('click', () => current && shareFile());
 
 $('#btn-whatsapp').addEventListener('click', () => {
   if (!current) return;
+  // Com partilha disponível (Mac), é a única forma de o PDF seguir anexado: escolher WhatsApp na lista.
+  if (canShareFile()) return shareFile();
   const phone = normalizePhone($('#phone').value);
   if ($('#phone').value && phone.length < 11) return setStatus('Verifique o número de telemóvel.');
   download();
