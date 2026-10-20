@@ -1,5 +1,5 @@
 // Subir a cada publicação: os portáteis com a app instalada atualizam a cache.
-export const APP_VERSION = 'v6';
+export const APP_VERSION = 'v7';
 
 // Dados fixos da nutricionista — alterar aqui se algo mudar.
 export const NUTRITIONIST = {

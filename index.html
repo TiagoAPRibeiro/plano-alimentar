@@ -47,22 +47,23 @@
         </label>
 
         <button type="button" class="btn primary wide" id="btn-share" hidden>Enviar PDF… <small>WhatsApp, Mail, AirDrop</small></button>
-        <p class="note share-note" hidden>Escolha <b>WhatsApp</b> na lista: o PDF segue anexado e a mensagem fica copiada para colar na conversa com ⌘V.</p>
+        <p class="note share-note" hidden>Abre o menu Partilhar do Mac com o PDF anexado (Mail, AirDrop…). A mensagem fica copiada para colar com ⌘V.</p>
         <button type="button" class="btn wide" id="btn-download">Descarregar PDF</button>
 
-        <div class="divider"><span>ou abrir a conversa</span></div>
+        <div class="divider"><span>ou abrir a conversa do cliente</span></div>
 
         <div class="inline-field wa-row">
-          <input type="tel" id="phone" placeholder="Telemóvel (ex.: 912 345 678)" autocomplete="off">
+          <input type="tel" id="phone" placeholder="Telemóvel do cliente (ex.: 912 345 678)" autocomplete="off">
           <button type="button" class="btn" id="btn-whatsapp">WhatsApp</button>
         </div>
         <div class="inline-field">
           <input type="email" id="email" placeholder="Email do cliente" autocomplete="off">
           <button type="button" class="btn" id="btn-email">Email</button>
         </div>
-        <p class="note fallback-note">Estas opções só levam a mensagem: o PDF é descarregado e é preciso arrastá-lo para a conversa ou para o email.</p>
-        <p class="note no-share-note" hidden>Este navegador não permite enviar o PDF diretamente para o WhatsApp. Abra a app no <b>Safari</b> para ter o botão “Enviar PDF…”.</p>
+        <p class="note fallback-note">O PDF é descarregado e a conversa abre com a mensagem já escrita. Depois é só arrastar o PDF das Transferências para a conversa.</p>
+        <p class="note no-share-note" hidden>Este navegador não tem o menu Partilhar; use as opções acima.</p>
         <p class="status" role="status"></p>
+        <a class="wa-web note" target="_blank" rel="noopener" hidden>O WhatsApp não abriu? Abrir no WhatsApp Web</a>
         <p class="version"></p>
       </aside>
     </div>

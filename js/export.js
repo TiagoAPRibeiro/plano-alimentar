@@ -41,6 +41,7 @@ function normalizePhone(raw) {
 
 function setStatus(msg) {
   $('.status').textContent = msg;
+  $('.wa-web').hidden = true;
 }
 
 export async function openExport(state, done) {
@@ -48,6 +49,9 @@ export async function openExport(state, done) {
   const name = fileName(state);
   $('.file-name').textContent = name;
   $('#msg').value = defaultMessage(state);
+  // limpos a cada plano, para nunca enviar para o cliente anterior
+  $('#phone').value = '';
+  $('#email').value = '';
   $('.preview').classList.add('loading');
   $('iframe').removeAttribute('src');
   setStatus('');
@@ -63,8 +67,6 @@ export async function openExport(state, done) {
     const share = canShareFile();
     $('#btn-share').hidden = !share;
     $('.share-note').hidden = !share;
-    $('.wa-row').hidden = share;
-    $('.divider span').textContent = share ? 'ou por email' : 'ou abrir a conversa';
     $('.no-share-note').hidden = share;
   } catch (err) {
     console.error(err);
@@ -103,27 +105,40 @@ async function shareFile() {
 
 $('#btn-share').addEventListener('click', () => current && shareFile());
 
+function fail(input, msg) {
+  setStatus(msg);
+  input.focus();
+}
+
+// Descarrega o PDF e abre a app WhatsApp na conversa do número, com a mensagem já escrita.
+// O PDF não pode seguir sozinho (um site não consegue anexar ficheiros noutra app):
+// a nutricionista arrasta-o das Transferências para a conversa.
 $('#btn-whatsapp').addEventListener('click', () => {
   if (!current) return;
-  // Com partilha disponível (Mac), é a única forma de o PDF seguir anexado: escolher WhatsApp na lista.
-  if (canShareFile()) return shareFile();
   const phone = normalizePhone($('#phone').value);
-  if ($('#phone').value && phone.length < 11) return setStatus('Verifique o número de telemóvel.');
+  if (phone.length < 11) return fail($('#phone'), 'Indique o número de telemóvel do cliente.');
   download();
   const text = encodeURIComponent($('#msg').value);
-  window.open(`https://wa.me/${phone}?text=${text}`, '_blank', 'noopener');
-  setStatus('PDF descarregado. Arraste-o dos Transferências para a conversa do WhatsApp.');
+  location.href = `whatsapp://send?phone=${phone}&text=${text}`;
+  setStatus('PDF descarregado. Na conversa que abriu, arraste o PDF das Transferências (↓ no Safari) e envie.');
+  $('.wa-web').href = `https://wa.me/${phone}?text=${text}`;
+  $('.wa-web').hidden = false;
 });
 
 $('#btn-email').addEventListener('click', () => {
   if (!current) return;
   const to = $('#email').value.trim();
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(to)) return fail($('#email'), 'Indique o email do cliente.');
   download();
   const subject = encodeURIComponent(current.file.name.replace(/\.pdf$/, ''));
   const body = encodeURIComponent($('#msg').value);
-  location.href = `mailto:${to.replace(/[^\w.+@-]/g, '')}?subject=${subject}&body=${body}`;
-  setStatus('PDF descarregado. Anexe-o ao email que abriu (arraste-o dos Transferências).');
+  location.href = `mailto:${to}?subject=${subject}&body=${body}`;
+  setStatus('PDF descarregado. No email que abriu, arraste o PDF das Transferências (↓ no Safari) e envie.');
 });
+
+// Enter no campo carrega no botão ao lado
+$('#phone').addEventListener('keydown', e => { if (e.key === 'Enter') $('#btn-whatsapp').click(); });
+$('#email').addEventListener('keydown', e => { if (e.key === 'Enter') $('#btn-email').click(); });
 
 dlg.addEventListener('close', () => {
   $('iframe').removeAttribute('src');
