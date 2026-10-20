@@ -24,10 +24,16 @@ Editor de planos alimentares que gera um PDF limpo e profissional, para enviar p
   Colar texto com várias linhas cria uma linha por cada.
 
 **Pré-visualizar e enviar** gera o PDF e oferece:
-- **Partilhar…**: a folha de partilha do macOS (WhatsApp Desktop, Mail, AirDrop) com o PDF já anexado.
+- **Enviar PDF…**: o menu Partilhar do macOS com o PDF anexado (Mail, AirDrop, WhatsApp se a extensão
+  de partilha estiver ativa). A mensagem fica copiada para colar com ⌘V.
 - **Descarregar PDF**.
-- **WhatsApp / Email**: descarrega o PDF e abre a conversa com a mensagem escrita; depois arrasta-se o ficheiro.
-  Um site não consegue anexar ficheiros a estas apps por si só.
+- **WhatsApp**: pede o telemóvel do cliente (9 dígitos recebem o indicativo 351), descarrega o PDF e,
+  um segundo depois, abre a app WhatsApp nessa conversa com a mensagem escrita.
+- **Email**: pede o email do cliente, descarrega o PDF e abre o Mail com destinatário, assunto e mensagem.
+
+  Nos dois últimos, arrasta-se o PDF das Transferências (↓ no Safari) para a conversa ou o email:
+  um site não consegue anexar ficheiros noutras apps. A espera de um segundo existe porque o Safari
+  cancela a descarga se a app abrir logo. Telemóvel e email são limpos a cada plano.
 
 ## Alterar dados fixos
 
