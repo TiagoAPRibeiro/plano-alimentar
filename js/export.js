@@ -105,6 +105,13 @@ async function shareFile() {
 
 $('#btn-share').addEventListener('click', () => current && shareFile());
 
+// No Safari, abrir logo a app (WhatsApp/Mail) cancela a descarga que acabou de começar.
+// Espera um momento para o PDF chegar às Transferências e só depois abre a app.
+function downloadThenOpen(url) {
+  download();
+  setTimeout(() => { location.href = url; }, 1200);
+}
+
 function fail(input, msg) {
   setStatus(msg);
   input.focus();
@@ -117,9 +124,8 @@ $('#btn-whatsapp').addEventListener('click', () => {
   if (!current) return;
   const phone = normalizePhone($('#phone').value);
   if (phone.length < 11) return fail($('#phone'), 'Indique o número de telemóvel do cliente.');
-  download();
   const text = encodeURIComponent($('#msg').value);
-  location.href = `whatsapp://send?phone=${phone}&text=${text}`;
+  downloadThenOpen(`whatsapp://send?phone=${phone}&text=${text}`);
   setStatus('PDF descarregado. Na conversa que abriu, arraste o PDF das Transferências (↓ no Safari) e envie.');
   $('.wa-web').href = `https://wa.me/${phone}?text=${text}`;
   $('.wa-web').hidden = false;
@@ -129,10 +135,9 @@ $('#btn-email').addEventListener('click', () => {
   if (!current) return;
   const to = $('#email').value.trim();
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(to)) return fail($('#email'), 'Indique o email do cliente.');
-  download();
   const subject = encodeURIComponent(current.file.name.replace(/\.pdf$/, ''));
   const body = encodeURIComponent($('#msg').value);
-  location.href = `mailto:${to}?subject=${subject}&body=${body}`;
+  downloadThenOpen(`mailto:${to}?subject=${subject}&body=${body}`);
   setStatus('PDF descarregado. No email que abriu, arraste o PDF das Transferências (↓ no Safari) e envie.');
 });
 
