@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="pt-PT">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Plano Alimentar · Elisabete Mendes</title>
+  <meta name="description" content="Editor de planos alimentares em PDF.">
+  <meta name="theme-color" content="#FBF8F3">
+  <link rel="icon" href="img/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="img/icon-192.png">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+  <nav class="topbar">
+    <div class="brand">
+      <img src="img/favicon.svg" alt="">
+      <span>Plano Alimentar</span>
+    </div>
+    <p class="shortcuts">Cole o plano na caixa de texto · clique no plano formatado para o editar · ⌘B negrito nas secções</p>
+    <div class="actions">
+      <label class="switch" title="As secções Fruta, Água, Suplementação… começam numa página nova">
+        <input type="checkbox" id="toggle-newpage"><span></span>Recomendações em página nova
+      </label>
+      <button type="button" class="btn ghost" id="btn-new">Novo plano</button>
+      <button type="button" class="btn primary" id="btn-export">Pré-visualizar e enviar</button>
+    </div>
+  </nav>
+
+  <main id="sheets" aria-label="Plano alimentar"></main>
+
+  <dialog id="export" aria-label="Exportar plano">
+    <div class="export-grid">
+      <div class="preview">
+        <iframe title="Pré-visualização do PDF"></iframe>
+        <div class="spinner">A gerar o PDF…</div>
+      </div>
+      <aside class="export-panel">
+        <div class="panel-head">
+          <h2>Enviar plano</h2>
+          <button type="button" class="tb" id="btn-close" aria-label="Fechar">✕</button>
+        </div>
+        <p class="file-name"></p>
+
+        <label class="field">Mensagem
+          <textarea id="msg" rows="5"></textarea>
+        </label>
+
+        <button type="button" class="btn primary wide" id="btn-share" hidden>Partilhar… <small>WhatsApp, Mail, AirDrop</small></button>
+        <button type="button" class="btn wide" id="btn-download">Descarregar PDF</button>
+
+        <div class="divider"><span>ou abrir a conversa</span></div>
+
+        <div class="inline-field">
+          <input type="tel" id="phone" placeholder="Telemóvel (ex.: 912 345 678)" autocomplete="off">
+          <button type="button" class="btn" id="btn-whatsapp">WhatsApp</button>
+        </div>
+        <div class="inline-field">
+          <input type="email" id="email" placeholder="Email do cliente" autocomplete="off">
+          <button type="button" class="btn" id="btn-email">Email</button>
+        </div>
+        <p class="note">O WhatsApp e o email não deixam anexar ficheiros a partir de um site. O PDF é descarregado e basta arrastá-lo para a conversa.</p>
+        <p class="status" role="status"></p>
+      </aside>
+    </div>
+  </dialog>
+
+  <script src="vendor/pdfmake.min.js"></script>
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
