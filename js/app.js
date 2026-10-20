@@ -1,4 +1,4 @@
-import { defaultPlan, section, SECTION_PRESETS, NUTRITIONIST, COLORS } from './config.js';
+import { defaultPlan, section, SECTION_PRESETS, NUTRITIONIST, COLORS, APP_VERSION } from './config.js';
 import { cleanHtml, isEmpty } from './richtext.js';
 import { iconSvg } from './icons.js';
 import { pairSections, isSingleLine, sectionHasContent, parseMeals, mealHasContent } from './model.js';
@@ -444,7 +444,7 @@ render();
 focusKey('client');
 
 if ('serviceWorker' in navigator && location.protocol === 'https:') {
-  navigator.serviceWorker.register('sw.js');
+  navigator.serviceWorker.register(`sw.js?v=${APP_VERSION}`);
 }
 
 // Para testes automáticos.

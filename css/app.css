@@ -323,3 +323,5 @@ textarea:focus, .inline-field input:focus { outline: 2px solid rgba(124, 153, 14
 
 .inline-field[hidden], .note[hidden] { display: none; }
 .share-note { margin: -2px 0 2px; }
+.version { margin: auto 0 0; padding-top: 12px; font-size: 10.5px; color: #B5B9B7; }
+.no-share-note { color: var(--coral); }

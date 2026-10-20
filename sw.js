@@ -1,6 +1,6 @@
 // Guarda a app em cache para funcionar sem internet.
-// Ao publicar alterações, subir a versão para os portáteis receberem a nova.
-const VERSION = 'v5';
+// A versão vem do registo (sw.js?v=…), definida em APP_VERSION em js/config.js.
+const VERSION = new URL(location.href).searchParams.get('v') || 'dev';
 const ASSETS = [
   './', 'index.html', 'manifest.webmanifest', 'css/app.css',
   'js/app.js', 'js/config.js', 'js/export.js', 'js/icons.js', 'js/model.js', 'js/pdf.js', 'js/photo.js', 'js/richtext.js',
@@ -20,15 +20,16 @@ self.addEventListener('activate', e => {
     .then(() => self.clients.claim()));
 });
 
-// Responde da cache e atualiza em segundo plano (a versão nova aparece na abertura seguinte).
+// Com internet vai sempre buscar a versão mais recente; sem internet usa a cópia guardada.
 self.addEventListener('fetch', e => {
   if (e.request.method !== 'GET' || new URL(e.request.url).origin !== location.origin) return;
   e.respondWith(caches.open(VERSION).then(async cache => {
-    const cached = await cache.match(e.request, { ignoreSearch: true });
-    const fresh = fetch(e.request).then(res => {
+    try {
+      const res = await fetch(e.request, { cache: 'no-cache' });
       if (res.ok) cache.put(e.request, res.clone());
       return res;
-    }).catch(() => cached);
-    return cached || fresh;
+    } catch {
+      return (await cache.match(e.request, { ignoreSearch: true })) || Response.error();
+    }
   }));
 });

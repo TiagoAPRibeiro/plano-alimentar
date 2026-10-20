@@ -1,5 +1,5 @@
 // Janela de pré-visualização e envio do PDF.
-import { NUTRITIONIST } from './config.js';
+import { NUTRITIONIST, APP_VERSION } from './config.js';
 import { pdfBlob, fileName } from './pdf.js';
 import { toRuns } from './richtext.js';
 
@@ -8,6 +8,8 @@ const $ = sel => dlg.querySelector(sel);
 
 let current = null; // { blob, file, url }
 let onDone = () => {};
+
+$('.version').textContent = `Versão ${APP_VERSION}`;
 
 function clientFirstName(state) {
   const name = toRuns(state.header.client).map(r => r.text).join('').trim();
@@ -63,6 +65,7 @@ export async function openExport(state, done) {
     $('.share-note').hidden = !share;
     $('.wa-row').hidden = share;
     $('.divider span').textContent = share ? 'ou por email' : 'ou abrir a conversa';
+    $('.no-share-note').hidden = share;
   } catch (err) {
     console.error(err);
     setStatus('Ocorreu um erro ao gerar o PDF.');
@@ -84,15 +87,17 @@ const canShareFile = () => !!(current && navigator.canShare && navigator.canShar
 // o "gesto" do utilizador exigido pelo Safari.
 async function shareFile() {
   const msg = $('#msg').value.trim();
+  // share() é chamado primeiro: o Safari só permite uma ação por clique e o PDF é o essencial.
+  const sharing = navigator.share({ files: [current.file] });
   const copied = msg && navigator.clipboard ? navigator.clipboard.writeText(msg).then(() => true, () => false) : Promise.resolve(false);
   try {
-    await navigator.share({ files: [current.file] });
+    await sharing;
     onDone();
     setStatus(await copied
       ? 'PDF enviado. A mensagem foi copiada: cole-a na conversa com ⌘V.'
-      : 'PDF enviado.');
+      : 'PDF enviado. Pode copiar a mensagem acima e colá-la na conversa.');
   } catch (err) {
-    if (err.name !== 'AbortError') setStatus('Não foi possível partilhar. Descarregue o PDF e arraste-o para a conversa.');
+    if (err.name !== 'AbortError') setStatus(`Não foi possível partilhar (${err.name}). Descarregue o PDF e arraste-o para a conversa.`);
   }
 }
 

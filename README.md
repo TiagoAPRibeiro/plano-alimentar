@@ -55,8 +55,8 @@ Editor de planos alimentares que gera um PDF limpo e profissional, para enviar p
    - Safari: **Ficheiro → Adicionar à Dock**. Chrome: ícone de instalar na barra de endereço.
    - Depois da primeira abertura funciona sem internet.
 
-**Ao publicar alterações**, aumentar `VERSION` em [sw.js](sw.js) (ex.: `v1` → `v2`). A versão nova aparece
-na segunda abertura da app.
+**Ao publicar alterações**, aumentar `APP_VERSION` em [js/config.js](js/config.js) (ex.: `v6` → `v7`). Com internet,
+a app vai sempre buscar a versão mais recente; a versão aparece no fundo da janela "Enviar plano".
 
 ## Testar localmente
 

@@ -1,3 +1,6 @@
+// Subir a cada publicação: os portáteis com a app instalada atualizam a cache.
+export const APP_VERSION = 'v6';
+
 // Dados fixos da nutricionista — alterar aqui se algo mudar.
 export const NUTRITIONIST = {
   name: 'Elisabete Mendes',
