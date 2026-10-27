@@ -206,8 +206,7 @@ const MEALS_PLACEHOLDER = '6h30 Em jejum:\n- 1 copo de água\n\n6h45 Pequeno-alm
 
 function renderMealView(m, i) {
   const items = m.items.filter(it => !isEmpty(it.text));
-  const t = mealTone(m, i);
-  return h('article', { class: 'meal', 'data-line': m.line, style: `--m-bg:${t.bg};--m-ac:${t.accent};--m-ink:${t.ink}` },
+  return h('article', { class: 'meal', 'data-line': m.line, style: `background:${mealTone(m, i)}` },
     h('div', { class: 'meal-left' },
       m.time ? h('div', { class: 'meal-time' }, m.time) : null,
       h('div', { class: 'meal-title', html: m.title })),

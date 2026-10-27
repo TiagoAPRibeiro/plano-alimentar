@@ -124,18 +124,18 @@ button { font: inherit; color: inherit; cursor: pointer; }
 .objective-text:empty::before { font-family: 'Lato'; font-size: 11pt; }
 
 /* refeições (linha do tempo) */
-.meal { display: grid; grid-template-columns: 104pt 1fr; position: relative; background: var(--m-bg, transparent); border-radius: 3pt; margin-bottom: 3pt; }
+.meal { display: grid; grid-template-columns: 104pt 1fr; position: relative; }
 .meal-left { display: flex; flex-direction: column; align-items: flex-end; text-align: right; padding: 6pt 12pt 6pt 0; gap: 1.5pt; }
-.meal-time { color: var(--m-ink, var(--coral)); font-weight: 700; }
+.meal-time { color: var(--coral); font-weight: 700; }
 .meal-time:empty::before, .meal-title:empty::before { font-size: 8pt; }
-.meal-body { border-left: 1pt solid transparent; padding: 6pt 0 6pt 14pt; position: relative; min-width: 0; }
-.meal-body .dot { position: absolute; left: -3.5pt; top: 8.5pt; width: 6pt; height: 6pt; border-radius: 50%; background: var(--m-ac, var(--sage-ac)); }
-.meal-title { font-weight: 700; font-size: 7.5pt; letter-spacing: 1.2pt; color: var(--m-ink, var(--sage)); text-transform: uppercase; }
+.meal-body { border-left: 1pt solid var(--line); padding: 6pt 8pt 6pt 14pt; position: relative; min-width: 0; }
+.meal-body .dot { position: absolute; left: -3.5pt; top: 8.5pt; width: 6pt; height: 6pt; border-radius: 50%; background: var(--page); border: 1.2pt solid var(--sage-ac); }
+.meal-title { font-weight: 700; font-size: 7.5pt; letter-spacing: 1.2pt; color: var(--sage); text-transform: uppercase; }
 
 .items { list-style: none; margin: 0; padding: 0; }
 .item { position: relative; margin-bottom: 1.5pt; }
 .item.bullet { padding-left: 10pt; }
-.item.bullet::before { content: '•'; position: absolute; left: 0; top: 0; color: var(--m-ac, var(--peach-ac)); }
+.item.bullet::before { content: '•'; position: absolute; left: 0; top: 0; color: var(--peach-ac); }
 .item.kind-sub { margin-top: 4pt; }
 .item.kind-sub:first-child { margin-top: 1pt; }
 .item .sub { font-size: 7.5pt; font-weight: 700; color: var(--muted); letter-spacing: 1pt; text-transform: uppercase; display: inline-block; }

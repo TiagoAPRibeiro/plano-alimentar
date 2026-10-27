@@ -26,14 +26,14 @@ export const COLORS = {
   },
 };
 
-// Uma cor por refeição: fundo suave, cor de destaque (ponto e marcadores) e cor da hora/nome.
+// Fundo muito suave de cada refeição (quase marca de água), para as distinguir sem mudar o resto.
 export const MEAL_TONES = {
-  blue: { bg: '#EDF3F4', accent: '#7FA0A8', ink: '#4F7680' },
-  peach: { bg: '#FBEFE7', accent: '#E29B7C', ink: '#C4704F' },
-  sage: { bg: '#EFF4F1', accent: '#7C998C', ink: '#557366' },
-  sand: { bg: '#F8F2E4', accent: '#CDA968', ink: '#9C7A3C' },
-  rose: { bg: '#F9EDEE', accent: '#D49297', ink: '#B0646B' },
-  lilac: { bg: '#F2EFF6', accent: '#9D90B8', ink: '#6F6290' },
+  blue: '#F6F7F6',
+  peach: '#FCF6F0',
+  sage: '#F7F8F4',
+  sand: '#FBF7EE',
+  rose: '#FBF5F3',
+  lilac: '#F8F6F7',
 };
 
 // Secções da página de recomendações. `icon` aponta para ICONS em icons.js.
