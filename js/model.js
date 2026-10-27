@@ -1,5 +1,6 @@
 // Regras partilhadas entre o editor e o PDF, para que ambos mostrem o mesmo.
-import { isEmpty, toRuns, runsToHtml } from './richtext.js';
+import { isEmpty, toRuns, runsToHtml, plainText } from './richtext.js';
+import { MEAL_TONES } from './config.js';
 
 // Duas secções "metade" seguidas ficam lado a lado; uma metade isolada ocupa a largura toda.
 export function pairSections(sections) {
@@ -38,6 +39,25 @@ export function titleCase(html) {
       return keep ? w.toLowerCase() : w[0].toUpperCase() + w.slice(1);
     }),
   })));
+}
+
+// Cor de cada refeição pelo nome, para ser sempre a mesma de plano para plano.
+const MEAL_TONE_RULES = [
+  [/jejum/, 'blue'],
+  [/pequeno/, 'peach'],
+  [/manh/, 'sage'],
+  [/almo/, 'sand'],
+  [/lanche|tarde|merenda/, 'rose'],
+  [/jantar/, 'lilac'],
+  [/ceia/, 'blue'],
+  [/treino/, 'sage'],
+];
+const CYCLE = ['peach', 'sage', 'sand', 'rose', 'lilac', 'blue'];
+
+export function mealTone(meal, index) {
+  const name = plainText(meal.title).toLowerCase();
+  const rule = MEAL_TONE_RULES.find(([re]) => re.test(name));
+  return MEAL_TONES[rule ? rule[1] : CYCLE[index % CYCLE.length]];
 }
 
 export function formatDate(iso) {
