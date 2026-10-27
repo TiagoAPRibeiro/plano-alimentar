@@ -2,7 +2,7 @@
 import { NUTRITIONIST, COLORS } from './config.js';
 import { toRuns, isEmpty } from './richtext.js';
 import { iconSvg } from './icons.js';
-import { pairSections, sectionHasContent, formatDate, mealHasContent, parseMeals } from './model.js';
+import { pairSections, sectionHasContent, formatDate, mealHasContent, parseMeals, titleCase } from './model.js';
 
 const PAGE_W = 595.28;
 const MARGIN_X = 46;
@@ -64,7 +64,7 @@ function header(h) {
   ];
 
   const objective = [{ text: 'Plano Alimentar', font: 'Cormorant', bold: true, fontSize: 22, color: C.ink }];
-  if (!isEmpty(h.objective)) objective.push(rich(h.objective, { font: 'Cormorant', bold: true, fontSize: 14, color: C.ink, margin: [0, 1, 0, 0] }));
+  if (!isEmpty(h.objective)) objective.push(rich(titleCase(h.objective), { font: 'Cormorant', bold: true, fontSize: 14, color: C.ink, margin: [0, 1, 0, 0] }));
   out.push({
     table: { widths: ['*'], body: [[{ fillColor: C.tones.sage.bg, alignment: 'center', stack: objective }]] },
     layout: { hLineWidth: () => 0, vLineWidth: () => 0, paddingTop: () => 9, paddingBottom: () => 9, paddingLeft: () => 12, paddingRight: () => 12 },
@@ -266,7 +266,14 @@ export function docDefinition(state) {
           margin: [0, 7, 0, 0],
           columns: [
             { text: [{ text: NUTRITIONIST.name, bold: true, color: C.ink }, `  ·  ${NUTRITIONIST.title}  ·  Cédula profissional n.º ${NUTRITIONIST.license}`], fontSize: 8, color: C.muted, width: '*' },
-            { text: `Tel. ${NUTRITIONIST.phone}${count > 1 ? `      ${page} / ${count}` : ''}`, fontSize: 8, color: C.muted, alignment: 'right', width: 'auto' },
+            {
+              text: [
+                `Tel. ${NUTRITIONIST.phone}  ·  `,
+                { text: NUTRITIONIST.website, color: C.sage, link: `https://${NUTRITIONIST.website}` },
+                count > 1 ? `      ${page} / ${count}` : '',
+              ],
+              fontSize: 8, color: C.muted, alignment: 'right', width: 'auto',
+            },
           ],
         },
       ],

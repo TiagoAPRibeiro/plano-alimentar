@@ -1,5 +1,5 @@
 // Subir a cada publicação: os portáteis com a app instalada atualizam a cache.
-export const APP_VERSION = 'v9';
+export const APP_VERSION = 'v10';
 
 // Dados fixos da nutricionista — alterar aqui se algo mudar.
 export const NUTRITIONIST = {
@@ -7,6 +7,7 @@ export const NUTRITIONIST = {
   title: 'Nutricionista',
   license: '3197N',
   phone: '917 937 251',
+  website: 'elisabetemendesnutri.com',
 };
 
 // Paleta retirada do logótipo (folhas verde-salva/azul, ananás pêssego/coral).

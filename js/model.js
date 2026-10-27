@@ -1,5 +1,5 @@
 // Regras partilhadas entre o editor e o PDF, para que ambos mostrem o mesmo.
-import { isEmpty } from './richtext.js';
+import { isEmpty, toRuns, runsToHtml } from './richtext.js';
 
 // Duas secções "metade" seguidas ficam lado a lado; uma metade isolada ocupa a largura toda.
 export function pairSections(sections) {
@@ -22,6 +22,22 @@ export function sectionHasContent(s) {
 
 export function mealHasContent(m) {
   return !isEmpty(m.title) || !isEmpty(m.time) || m.items.some(it => !isEmpty(it.text));
+}
+
+// Subtítulo da caixa "Plano Alimentar": cada palavra com maiúscula inicial,
+// exceto as pequenas palavras de ligação ("Menopausa e Ganho de Massa Muscular").
+const MINOR = new Set(['a', 'o', 'as', 'os', 'e', 'ou', 'de', 'da', 'do', 'das', 'dos', 'em', 'na', 'no', 'nas', 'nos', 'com', 'para', 'por', 'à', 'ao', 'aos', 'às']);
+
+export function titleCase(html) {
+  let first = true;
+  return runsToHtml(toRuns(html).map(r => ({
+    ...r,
+    text: r.text.replace(/\p{L}[\p{L}\p{M}'’-]*/gu, w => {
+      const keep = !first && MINOR.has(w.toLowerCase());
+      first = false;
+      return keep ? w.toLowerCase() : w[0].toUpperCase() + w.slice(1);
+    }),
+  })));
 }
 
 export function formatDate(iso) {

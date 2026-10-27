@@ -8,7 +8,7 @@ Editor de planos alimentares que gera um PDF limpo e profissional, para enviar p
 
 - A folha A4 edita-se diretamente; o que se vê corresponde ao PDF.
 - **Página 1**: cabeçalho ("Consulta de Nutrição", data, "Utente:" + nome, próxima consulta opcional), caixa "Plano Alimentar"
-  (título fixo, com o objetivo opcional por baixo) e refeições numa linha do tempo.
+  (título fixo, com o objetivo opcional por baixo, em maiúsculas iniciais) e refeições numa linha do tempo.
   As refeições são **uma caixa de texto livre**: cola-se o plano inteiro copiado do software da empresa e a app formata-o:
   - linha que começa por hora (`6h30 Em jejum:`, `12h30 - 13h00 Almoço:`) ou por um nome de refeição (`Ceia:`) → nova refeição;
   - linha com `-`, `•` ou `1•` → ponto da lista (as linhas sem hífen não levam ponto);
@@ -39,7 +39,7 @@ Editor de planos alimentares que gera um PDF limpo e profissional, para enviar p
 
 ## Alterar dados fixos
 
-- Nome, cédula e telefone: [js/config.js](js/config.js) (`NUTRITIONIST`).
+- Nome, cédula, telefone e site: [js/config.js](js/config.js) (`NUTRITIONIST`).
 - Texto com que as secções abrem: `defaultPlan()` no mesmo ficheiro (as refeições começam vazias).
 - Regras de formatação do texto colado: `parseMeals()` em [js/model.js](js/model.js).
 - Cores: `COLORS` em `js/config.js` (PDF) e as variáveis no início de [css/app.css](css/app.css) (editor).

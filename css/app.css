@@ -88,6 +88,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
   font-size: 8pt; color: var(--muted); white-space: pre;
 }
 .sheet-foot b { color: var(--ink); }
+.sheet-foot .site { color: var(--sage); }
 
 /* campos editáveis */
 .ed { outline: none; border-radius: 3px; min-width: 2em; cursor: text; transition: background .12s, box-shadow .12s; }

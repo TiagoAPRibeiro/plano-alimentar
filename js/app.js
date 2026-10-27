@@ -1,7 +1,7 @@
 import { defaultPlan, section, SECTION_PRESETS, NUTRITIONIST, COLORS, APP_VERSION } from './config.js';
 import { cleanHtml, isEmpty } from './richtext.js';
 import { iconSvg } from './icons.js';
-import { pairSections, sectionHasContent, parseMeals, mealHasContent } from './model.js';
+import { pairSections, sectionHasContent, parseMeals, mealHasContent, titleCase } from './model.js';
 import { openExport } from './export.js';
 import { prepPhoto } from './photo.js';
 
@@ -167,6 +167,12 @@ function renderHeader() {
     type: 'date', class: cls, value: hd[key],
     oninput: e => { hd[key] = e.target.value; touch(); e.target.closest('.next')?.classList.toggle('empty', !e.target.value); },
   });
+  // maiúsculas iniciais aplicadas ao sair do campo, para não mexer no cursor enquanto se escreve
+  const objective = editable({ html: hd.objective, cls: 'objective-text', single: true, key: 'objective', ph: 'Ex.: Menopausa, ganho de massa muscular…', onInput: v => (hd.objective = v) });
+  objective.addEventListener('blur', () => {
+    const v = titleCase(hd.objective);
+    if (v !== hd.objective) { hd.objective = v; objective.innerHTML = v; }
+  });
   return [
     h('header', { class: 'plan-head' },
       h('img', { class: 'logo', src: 'img/logo.png', alt: NUTRITIONIST.name }),
@@ -184,7 +190,7 @@ function renderHeader() {
     h('div', { class: 'rule' }),
     h('div', { class: 'objective' },
       h('div', { class: 'objective-title' }, 'Plano Alimentar'),
-      editable({ html: hd.objective, cls: 'objective-text', single: true, key: 'objective', ph: 'Ex.: Menopausa, ganho de massa muscular…', onInput: v => (hd.objective = v) })),
+      objective),
   ];
 }
 
@@ -389,7 +395,7 @@ function addSectionMenu() {
 function footer() {
   return h('footer', { class: 'sheet-foot' },
     h('span', {}, h('b', {}, NUTRITIONIST.name), `  ·  ${NUTRITIONIST.title}  ·  Cédula profissional n.º ${NUTRITIONIST.license}`),
-    h('span', {}, `Tel. ${NUTRITIONIST.phone}`));
+    h('span', {}, `Tel. ${NUTRITIONIST.phone}  ·  `, h('span', { class: 'site' }, NUTRITIONIST.website)));
 }
 
 function miniHeader() {
