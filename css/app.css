@@ -100,7 +100,9 @@ button { font: inherit; color: inherit; cursor: pointer; }
 .plan-head .logo { width: 138pt; height: auto; display: block; }
 .head-right { flex: 1; display: flex; flex-direction: column; align-items: flex-end; text-align: right; padding-top: 12pt; gap: 3pt; }
 .plan-title { font-family: 'Cormorant'; font-weight: 600; font-size: 30pt; line-height: .95; }
-.client { font-size: 13pt; margin-top: 3pt; }
+.client-row { display: flex; align-items: baseline; justify-content: flex-end; gap: 4pt; font-size: 13pt; margin-top: 1pt; }
+.client-label { color: var(--muted); }
+.client { min-width: 80pt; }
 .head-right input[type=date] {
   font: inherit; font-size: 9pt; color: var(--muted); border: 0; background: transparent; text-align: right;
   padding: 1px 2px; border-radius: 3px; font-family: 'Lato';
@@ -116,8 +118,8 @@ button { font: inherit; color: inherit; cursor: pointer; }
 .rule { height: 0; border-top: .8pt solid var(--line); margin: 12pt 0 14pt; }
 
 .objective { background: var(--sage-bg); text-align: center; padding: 9pt 12pt 8pt; margin-bottom: 16pt; }
-.eyebrow { display: block; font-size: 6.5pt; font-weight: 700; letter-spacing: 2pt; color: var(--sage); text-transform: uppercase; }
-.objective-text { font-family: 'Cormorant'; font-weight: 600; font-size: 18pt; margin-top: 2pt; display: inline-block; min-width: 60%; }
+.objective-title { font-family: 'Cormorant'; font-weight: 600; font-size: 22pt; line-height: 1.1; }
+.objective-text { font-family: 'Cormorant'; font-weight: 600; font-size: 14pt; margin-top: 1pt; display: inline-block; min-width: 60%; }
 .objective-text:empty::before { font-family: 'Lato'; font-size: 11pt; }
 
 /* refeições (linha do tempo) */
@@ -130,13 +132,11 @@ button { font: inherit; color: inherit; cursor: pointer; }
 .meal-title { font-weight: 700; font-size: 7.5pt; letter-spacing: 1.2pt; color: var(--sage); text-transform: uppercase; }
 
 .items { list-style: none; margin: 0; padding: 0; }
-.item { position: relative; padding-left: 10pt; margin-bottom: 1.5pt; }
-.item::before { content: '•'; position: absolute; left: 0; top: 0; color: var(--peach-ac); }
-.meal.single .item::before { content: none; }
-.meal.single .item { padding-left: 0; }
-.item.kind-sub { padding-left: 0; margin-top: 4pt; }
+.item { position: relative; margin-bottom: 1.5pt; }
+.item.bullet { padding-left: 10pt; }
+.item.bullet::before { content: '•'; position: absolute; left: 0; top: 0; color: var(--peach-ac); }
+.item.kind-sub { margin-top: 4pt; }
 .item.kind-sub:first-child { margin-top: 1pt; }
-.item.kind-sub::before { content: none; }
 .item .sub { font-size: 7.5pt; font-weight: 700; color: var(--muted); letter-spacing: 1pt; text-transform: uppercase; display: inline-block; }
 
 /* ferramentas que aparecem ao passar o rato (não vão para o PDF) */

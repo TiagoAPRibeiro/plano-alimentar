@@ -1,5 +1,5 @@
 // Subir a cada publicação: os portáteis com a app instalada atualizam a cache.
-export const APP_VERSION = 'v8';
+export const APP_VERSION = 'v9';
 
 // Dados fixos da nutricionista — alterar aqui se algo mudar.
 export const NUTRITIONIST = {
@@ -33,6 +33,7 @@ export const SECTION_PRESETS = {
   plate: { title: 'Composição do prato', icon: 'plate', tone: 'sage', columns: 1, list: 'number' },
   cooking: { title: 'Confeções e temperos', icon: 'pan', tone: 'blue', columns: 1, list: 'none' },
   tips: { title: 'Dicas', icon: 'tips', tone: 'peach', columns: 1, list: 'bullet' },
+  recipes: { title: 'Receitas', icon: 'recipe', tone: 'sage', columns: 1, list: 'bullet' },
   photos: { title: 'Fotografias', icon: 'photo', tone: 'none' },
 };
 
@@ -44,7 +45,7 @@ export function defaultPlan() {
   const iso = d => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
 
   return {
-    header: { title: 'Plano Alimentar', client: '', objective: '', date: iso(today), nextVisit: '' },
+    header: { title: 'Consulta de Nutrição', client: '', objective: '', date: iso(today), nextVisit: '' },
     sectionsOnNewPage: true,
     // Refeições: texto livre colado do software da empresa (ver parseMeals em model.js).
     mealsText: '',
@@ -57,12 +58,11 @@ export function defaultPlan() {
           '½ marmelo (assado com canela)', '1 rodela de abacaxi', '12 cerejas', '12 uvas', '½ manga', '3 figos',
           '1 banana pequena', '1 anona', '1 dióspiro'],
       }),
-      section('water', { width: 'half', intro: 'Beber <b>1,5 L de água</b> por dia.' }),
-      section('supplements', { width: 'half', items: [
-        '<b>Bisglicinato de magnésio</b> – 2 cápsulas à noite',
-        '<b>Woman Balance Hot Flashes</b> – 1 comprimido por dia, de preferência depois do pequeno-almoço, e 1 cápsula (transparente) por dia, de preferência depois do jantar',
-      ] }),
+      section('water', { intro: 'Beber <b>1,5 L de água</b> por dia.', list: 'none', items: ['Sugestão: 3 garrafas de 500 ml'] }),
+      section('supplements', { items: ['', ''] }),
+      section('photos', { width: 'half', caption: 'Exemplo de prato equilibrado', photos: ['img/prato-1.png', 'img/prato-2.png'] }),
       section('plate', {
+        width: 'half',
         intro: 'Prato e talheres de sobremesa:',
         items: [
           '<b>Meio prato</b> de salada ou legumes – pouco cozinhados e com pouca gordura.',
@@ -70,8 +70,7 @@ export function defaultPlan() {
           '<b>Hidratos: 3 colheres de sopa (80 g)</b> de uma guarnição à escolha – ex.: grão de soja, grão-de-bico, ervilhas, lentilhas, feijão preto, vermelho ou branco, couscous, quinoa, arroz, arroz basmati, massa, massa integral, batata-doce, batata…',
         ],
       }),
-      section('photos', { width: 'half', caption: 'Exemplo de prato equilibrado', photos: ['img/prato-1.png', 'img/prato-2.png'] }),
-      section('cooking', { width: 'half', items: [
+      section('cooking', { items: [
         '<b>Confeções:</b> estufados em cru, assados com pouca gordura e sem tostar, grelhados sem gordura, cozidos a vapor e salteados com azeite e alho.',
         '<b>Temperos:</b> ervas aromáticas, especiarias, flor de sal ou sal rosa dos Himalaias, azeite, vinagre, vinho e cerveja.',
       ] }),

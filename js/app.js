@@ -1,7 +1,7 @@
 import { defaultPlan, section, SECTION_PRESETS, NUTRITIONIST, COLORS, APP_VERSION } from './config.js';
 import { cleanHtml, isEmpty } from './richtext.js';
 import { iconSvg } from './icons.js';
-import { pairSections, isSingleLine, sectionHasContent, parseMeals, mealHasContent } from './model.js';
+import { pairSections, sectionHasContent, parseMeals, mealHasContent } from './model.js';
 import { openExport } from './export.js';
 import { prepPhoto } from './photo.js';
 
@@ -172,8 +172,10 @@ function renderHeader() {
       h('img', { class: 'logo', src: 'img/logo.png', alt: NUTRITIONIST.name }),
       h('div', { class: 'head-right' },
         editable({ html: escapeText(hd.title), cls: 'plan-title', single: true, ph: 'Título', onInput: v => (hd.title = v) }),
-        editable({ html: hd.client, cls: 'client', single: true, key: 'client', ph: 'Nome do cliente', onInput: v => (hd.client = v) }),
         dateInput('date', 'date'),
+        h('div', { class: 'client-row' },
+          h('span', { class: 'client-label' }, 'Utente:'),
+          editable({ html: hd.client, cls: 'client', single: true, key: 'client', ph: 'Nome do cliente', onInput: v => (hd.client = v) })),
         h('label', { class: `next ${hd.nextVisit ? '' : 'empty'}`, title: 'Opcional: se ficar vazio não aparece no PDF' },
           h('span', {}, 'Próxima consulta'), dateInput('nextVisit', 'next-date'),
           hd.nextVisit ? null : h('span', { class: 'hint' }, '(opcional)')),
@@ -181,7 +183,7 @@ function renderHeader() {
     ),
     h('div', { class: 'rule' }),
     h('div', { class: 'objective' },
-      h('span', { class: 'eyebrow' }, 'Objetivo da consulta'),
+      h('div', { class: 'objective-title' }, 'Plano Alimentar'),
       editable({ html: hd.objective, cls: 'objective-text', single: true, key: 'objective', ph: 'Ex.: Menopausa, ganho de massa muscular…', onInput: v => (hd.objective = v) })),
   ];
 }
@@ -198,14 +200,14 @@ const MEALS_PLACEHOLDER = '6h30 Em jejum:\n- 1 copo de água\n\n6h45 Pequeno-alm
 
 function renderMealView(m) {
   const items = m.items.filter(it => !isEmpty(it.text));
-  return h('article', { class: `meal ${isSingleLine(m) ? 'single' : ''}`, 'data-line': m.line },
+  return h('article', { class: 'meal', 'data-line': m.line },
     h('div', { class: 'meal-left' },
       m.time ? h('div', { class: 'meal-time' }, m.time) : null,
       h('div', { class: 'meal-title', html: m.title })),
     h('div', { class: 'meal-body' },
       h('span', { class: 'dot' }),
       h('ul', { class: 'items' }, items.map(it =>
-        h('li', { class: `item kind-${it.kind}` }, h('div', { class: it.kind === 'sub' ? 'sub' : '', html: it.text }))))));
+        h('li', { class: `item kind-${it.kind} ${it.bullet ? 'bullet' : ''}` }, h('div', { class: it.kind === 'sub' ? 'sub' : '', html: it.text }))))));
 }
 
 function renderMeals() {

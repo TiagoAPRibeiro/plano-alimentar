@@ -24,12 +24,6 @@ export function mealHasContent(m) {
   return !isEmpty(m.title) || !isEmpty(m.time) || m.items.some(it => !isEmpty(it.text));
 }
 
-// Refeição com uma só linha (ex.: "1 copo de água") é mostrada sem marcador.
-export function isSingleLine(m) {
-  const items = m.items.filter(it => !isEmpty(it.text));
-  return items.length === 1 && items[0].kind === 'item';
-}
-
 export function formatDate(iso) {
   if (!iso) return '';
   const d = new Date(iso + 'T12:00:00');
@@ -78,13 +72,15 @@ export function parseMeals(text) {
     if (MEAL_NAMES.test(line)) { start('', inline(line.replace(/:$/, ''))); continue; }
 
     if (!cur) start('', '');
+    // só as linhas começadas por "-" (ou •, 1•) levam o ponto
+    const bullet = BULLET.test(line);
     const body = line.replace(BULLET, '');
-    if (!BULLET.test(line) && line.endsWith(':') && line.length <= 40) {
+    if (!bullet && line.endsWith(':') && line.length <= 40) {
       cur.items.push({ kind: 'sub', text: inline(line.slice(0, -1)) });
       continue;
     }
     const label = body.match(LABEL);
-    cur.items.push({ kind: 'item', text: label ? `<b>${inline(label[1])}:</b> ${inline(label[2])}` : inline(body) });
+    cur.items.push({ kind: 'item', bullet, text: label ? `<b>${inline(label[1])}:</b> ${inline(label[2])}` : inline(body) });
   }
   return meals;
 }

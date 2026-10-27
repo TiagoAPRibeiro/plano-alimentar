@@ -7,16 +7,18 @@ Editor de planos alimentares que gera um PDF limpo e profissional, para enviar p
 ## Como funciona
 
 - A folha A4 edita-se diretamente; o que se vê corresponde ao PDF.
-- **Página 1**: cabeçalho (cliente, data, próxima consulta opcional), objetivo da consulta e refeições numa linha do tempo.
+- **Página 1**: cabeçalho ("Consulta de Nutrição", data, "Utente:" + nome, próxima consulta opcional), caixa "Plano Alimentar"
+  (título fixo, com o objetivo opcional por baixo) e refeições numa linha do tempo.
   As refeições são **uma caixa de texto livre**: cola-se o plano inteiro copiado do software da empresa e a app formata-o:
   - linha que começa por hora (`6h30 Em jejum:`, `12h30 - 13h00 Almoço:`) ou por um nome de refeição (`Ceia:`) → nova refeição;
-  - linha com `-`, `•` ou `1•` → ponto da lista;
+  - linha com `-`, `•` ou `1•` → ponto da lista (as linhas sem hífen não levam ponto);
   - linha curta terminada em `:` (`PRATO DE SOBREMESA:`) → subtítulo;
   - `Sobremesa: 1 gelatina` → rótulo a negrito; `**texto**` → negrito.
 
   Ao sair da caixa aparece o plano formatado; clicar numa refeição volta ao texto com o cursor nessa linha.
   (A versão anterior, com campos individuais por refeição, está guardada em [OldForFuture.md](OldForFuture.md).)
-- **Página 2**: recomendações (Fruta, Água, Suplementação, Composição do prato, Confeções e temperos, Dicas, Fotografias).
+- **Página 2**: recomendações (Fruta, Água, Suplementação, Fotografias + Composição do prato lado a lado,
+  Confeções e temperos, Dicas; no menu há também Receitas).
 - Passar o rato sobre um bloco mostra os controlos: mover, duplicar, apagar; nas secções também largura (inteira/meia), colunas, estilo da lista e cor.
 - Duas secções seguidas com **meia largura** ficam lado a lado.
 - Linhas e secções vazias não aparecem no PDF.

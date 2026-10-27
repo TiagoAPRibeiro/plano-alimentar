@@ -2,7 +2,7 @@
 import { NUTRITIONIST, COLORS } from './config.js';
 import { toRuns, isEmpty } from './richtext.js';
 import { iconSvg } from './icons.js';
-import { pairSections, sectionHasContent, formatDate, mealHasContent, isSingleLine, parseMeals } from './model.js';
+import { pairSections, sectionHasContent, formatDate, mealHasContent, parseMeals } from './model.js';
 
 const PAGE_W = 595.28;
 const MARGIN_X = 46;
@@ -46,10 +46,13 @@ const upper = html => toRuns(html).map(r => ({ ...r, text: r.text.toUpperCase() 
 
 function header(h) {
   const right = [
-    { text: h.title || 'Plano Alimentar', font: 'Cormorant', bold: true, fontSize: 30, color: C.ink, alignment: 'right', lineHeight: 0.9 },
+    { text: h.title || 'Consulta de Nutrição', font: 'Cormorant', bold: true, fontSize: 30, color: C.ink, alignment: 'right', lineHeight: 0.9 },
   ];
-  if (!isEmpty(h.client)) right.push(rich(h.client, { fontSize: 13, color: C.ink, alignment: 'right', margin: [0, 6, 0, 0] }));
-  if (h.date) right.push({ text: formatDate(h.date), fontSize: 9, color: C.muted, alignment: 'right', margin: [0, 3, 0, 0] });
+  if (h.date) right.push({ text: formatDate(h.date), fontSize: 9, color: C.muted, alignment: 'right', margin: [0, 6, 0, 0] });
+  if (!isEmpty(h.client)) right.push({
+    text: [{ text: 'Utente: ', color: C.muted }, ...toRuns(h.client)],
+    fontSize: 13, color: C.ink, alignment: 'right', margin: [0, 3, 0, 0],
+  });
   if (h.nextVisit) right.push({
     text: [{ text: 'Próxima consulta  ', color: C.muted }, { text: formatDate(h.nextVisit), color: C.coral, bold: true }],
     fontSize: 9, alignment: 'right', margin: [0, 2, 0, 0],
@@ -60,38 +63,28 @@ function header(h) {
     { canvas: [{ type: 'line', x1: 0, y1: 0, x2: CONTENT_W, y2: 0, lineWidth: 0.8, lineColor: C.line }], margin: [0, 12, 0, 14] },
   ];
 
-  if (!isEmpty(h.objective)) {
-    out.push({
-      table: {
-        widths: ['*'],
-        body: [[{
-          fillColor: C.tones.sage.bg,
-          alignment: 'center',
-          stack: [
-            { text: 'OBJETIVO DA CONSULTA', fontSize: 6.5, bold: true, characterSpacing: 2, color: C.sage },
-            rich(h.objective, { font: 'Cormorant', bold: true, fontSize: 18, color: C.ink, margin: [0, 2, 0, 0] }),
-          ],
-        }]],
-      },
-      layout: { hLineWidth: () => 0, vLineWidth: () => 0, paddingTop: () => 9, paddingBottom: () => 8, paddingLeft: () => 12, paddingRight: () => 12 },
-      margin: [0, 0, 0, 16],
-    });
-  }
+  const objective = [{ text: 'Plano Alimentar', font: 'Cormorant', bold: true, fontSize: 22, color: C.ink }];
+  if (!isEmpty(h.objective)) objective.push(rich(h.objective, { font: 'Cormorant', bold: true, fontSize: 14, color: C.ink, margin: [0, 1, 0, 0] }));
+  out.push({
+    table: { widths: ['*'], body: [[{ fillColor: C.tones.sage.bg, alignment: 'center', stack: objective }]] },
+    layout: { hLineWidth: () => 0, vLineWidth: () => 0, paddingTop: () => 9, paddingBottom: () => 9, paddingLeft: () => 12, paddingRight: () => 12 },
+    margin: [0, 0, 0, 16],
+  });
   return out;
 }
 
 // ---------- Refeições ----------
 
 function mealItems(meal) {
-  const items = meal.items.filter(it => !isEmpty(it.text));
-  if (isSingleLine(meal)) return [rich(items[0].text, { fontSize: 9.5, lineHeight: 1.22 })];
-
   const out = [];
   let list = null;
-  for (const it of items) {
+  for (const it of meal.items.filter(i => !isEmpty(i.text))) {
     if (it.kind === 'sub') {
       list = null;
       out.push({ text: upper(it.text), fontSize: 7.5, bold: true, color: C.muted, characterSpacing: 1, margin: [0, out.length ? 4 : 1, 0, 1.5] });
+    } else if (!it.bullet) {
+      list = null;
+      out.push(rich(it.text, { fontSize: 9.5, lineHeight: 1.22, margin: [0, 0, 0, 1.5] }));
     } else {
       if (!list) {
         list = { ul: [], markerColor: C.tones.peach.accent, fontSize: 9.5, lineHeight: 1.22 };
