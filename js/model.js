@@ -1,6 +1,5 @@
 // Regras partilhadas entre o editor e o PDF, para que ambos mostrem o mesmo.
-import { isEmpty, toRuns, runsToHtml, plainText } from './richtext.js';
-import { MEAL_TONES } from './config.js';
+import { isEmpty, toRuns, runsToHtml } from './richtext.js';
 
 // Duas secções "metade" seguidas ficam lado a lado; uma metade isolada ocupa a largura toda.
 export function pairSections(sections) {
@@ -41,25 +40,6 @@ export function titleCase(html) {
   })));
 }
 
-// Cor de cada refeição pelo nome, para ser sempre a mesma de plano para plano.
-const MEAL_TONE_RULES = [
-  [/jejum/, 'blue'],
-  [/pequeno/, 'peach'],
-  [/manh/, 'sage'],
-  [/almo/, 'sand'],
-  [/lanche|tarde|merenda/, 'rose'],
-  [/jantar/, 'lilac'],
-  [/ceia/, 'blue'],
-  [/treino/, 'sage'],
-];
-const CYCLE = ['peach', 'sage', 'sand', 'rose', 'lilac', 'blue'];
-
-export function mealTone(meal, index) {
-  const name = plainText(meal.title).toLowerCase();
-  const rule = MEAL_TONE_RULES.find(([re]) => re.test(name));
-  return MEAL_TONES[rule ? rule[1] : CYCLE[index % CYCLE.length]];
-}
-
 export function formatDate(iso) {
   if (!iso) return '';
   const d = new Date(iso + 'T12:00:00');
@@ -76,15 +56,9 @@ export function formatDate(iso) {
 //   Sobremesa: 1 gelatina sem açúcar
 //   Ceia:
 
-// 7h30, 7:30, 7.30 ou só 7h
-const TIME = String.raw`\d{1,2}\s*(?:[h:.]\s*\d{2}|h)`;
-const RANGE = String.raw`${TIME}(?:\s*(?:-|–|—|a|às)\s*${TIME})?`;
-const NAMES = String.raw`em jejum|jejum|pequeno[\s-]*almo[çc]o|meio da manh[ãa]|a meio da manh[ãa]|almo[çc]o|lanche|lanche da manh[ãa]|lanche da tarde|meio da tarde|merenda|jantar|ceia|pr[ée][\s-]*treino|p[óo]s[\s-]*treino`;
-// hora primeiro: "6h30 Em jejum:"
-const HEADING_TIME = new RegExp(String.raw`^(${RANGE})\s*[-–:.]?\s*(.*?)\s*:?\s*$`, 'iu');
-// nome primeiro: "Lanche da tarde 16h00:", "Pequeno-almoço (7h00)"
-const NAME_TIME = new RegExp(String.raw`^((?:${NAMES})(?!\p{L})[^:()]{0,20}?)\s*[-–—,(]?\s*(${RANGE})\s*\)?\s*:?$`, 'iu');
-const MEAL_NAMES = new RegExp(String.raw`^(?:${NAMES})(?!\p{L})[^:]{0,20}:?$`, 'iu');
+const TIME = String.raw`\d{1,2}\s*[h:]\s*\d{2}`;
+const HEADING_TIME = new RegExp(String.raw`^(${TIME}(?:\s*(?:-|–|—|a|às)\s*${TIME})?)\s*[-–:.]?\s*(.*?)\s*:?\s*$`, 'i');
+const MEAL_NAMES = /^(em jejum|jejum|pequeno[\s-]*almo[çc]o|meio da manh[ãa]|a meio da manh[ãa]|almo[çc]o|lanche|lanche da manh[ãa]|lanche da tarde|meio da tarde|merenda|jantar|ceia|pr[ée][\s-]*treino|p[óo]s[\s-]*treino)\b[^:]{0,20}:?$/i;
 const BULLET = /^(?:[-–—•·*▪◦●]|\d{1,2}\s*[•.)](?!\d))\s*/;
 const LABEL = /^([^:]{2,24}):\s+(.+)$/;
 
@@ -94,7 +68,7 @@ const inline = s => esc(s).replace(/\*\*(.+?)\*\*/g, '<b>$1</b>');
 
 function normTime(t) {
   return t.split(/\s*(?:-|–|—|a|às)\s*(?=\d)/i)
-    .map(p => p.replace(/\s/g, '').replace(/[:.]/, 'h').replace(/^(\d)h/, '0$1h').replace(/h$/, 'h00'))
+    .map(p => p.replace(/\s/g, '').replace(':', 'h').replace(/^(\d)h/, '0$1h'))
     .join(' – ');
 }
 
@@ -110,18 +84,8 @@ export function parseMeals(text) {
     if (!line) continue;
 
     const t = line.match(HEADING_TIME);
-    // "7h" sem minutos só abre refeição se vier com o nome dela ("7h Pequeno-almoço")
-    const loose = t && !/[h:.]\s*\d{2}/i.test(t[1]) && t[2] && !MEAL_NAMES.test(t[2]);
-    if (t && !loose && !BULLET.test(line)) { start(normTime(t[1]), inline(t[2].replace(/:$/, ''))); continue; }
-    const nt = line.match(NAME_TIME);
-    if (nt) { start(normTime(nt[2]), inline(nt[1])); continue; }
-    if (MEAL_NAMES.test(line)) {
-      const title = inline(line.replace(/:$/, ''));
-      // hora numa linha e nome na seguinte: junta os dois
-      if (cur && cur.time && !cur.title && !cur.items.length) cur.title = title;
-      else start('', title);
-      continue;
-    }
+    if (t && !BULLET.test(line)) { start(normTime(t[1]), inline(t[2].replace(/:$/, ''))); continue; }
+    if (MEAL_NAMES.test(line)) { start('', inline(line.replace(/:$/, ''))); continue; }
 
     if (!cur) start('', '');
     // só as linhas começadas por "-" (ou •, 1•) levam o ponto

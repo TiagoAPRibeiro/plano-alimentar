@@ -1,5 +1,5 @@
 // Subir a cada publicação: os portáteis com a app instalada atualizam a cache.
-export const APP_VERSION = 'v11';
+export const APP_VERSION = 'v12';
 
 // Dados fixos da nutricionista — alterar aqui se algo mudar.
 export const NUTRITIONIST = {
@@ -24,16 +24,6 @@ export const COLORS = {
     blue: { bg: '#EDF3F4', accent: '#7FA0A8' },
     none: { bg: null, accent: '#7C998C' },
   },
-};
-
-// Fundo muito suave de cada refeição (quase marca de água), para as distinguir sem mudar o resto.
-export const MEAL_TONES = {
-  blue: '#F6F7F6',
-  peach: '#FCF6F0',
-  sage: '#F7F8F4',
-  sand: '#FBF7EE',
-  rose: '#FBF5F3',
-  lilac: '#F8F6F7',
 };
 
 // Secções da página de recomendações. `icon` aponta para ICONS em icons.js.

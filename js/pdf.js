@@ -2,7 +2,7 @@
 import { NUTRITIONIST, COLORS } from './config.js';
 import { toRuns, isEmpty } from './richtext.js';
 import { iconSvg } from './icons.js';
-import { pairSections, sectionHasContent, formatDate, mealHasContent, parseMeals, titleCase, mealTone } from './model.js';
+import { pairSections, sectionHasContent, formatDate, mealHasContent, parseMeals, titleCase } from './model.js';
 
 const PAGE_W = 595.28;
 const MARGIN_X = 46;
@@ -97,17 +97,15 @@ function mealItems(meal) {
 }
 
 function meals(list) {
-  const rows = list.filter(mealHasContent).map((m, i) => [
+  const rows = list.filter(mealHasContent).map(m => [
     {
       alignment: 'right',
-      fillColor: mealTone(m, i),
       stack: [
         isEmpty(m.time) ? null : { text: m.time, color: C.coral, bold: true, fontSize: 9.5 },
         { text: upper(m.title), bold: true, fontSize: 7.5, characterSpacing: 1.2, color: C.sage, margin: [0, 1.5, 0, 0] },
       ].filter(Boolean),
     },
     {
-      fillColor: mealTone(m, i),
       stack: [
         // marcador da linha do tempo
         { canvas: [{ type: 'ellipse', x: 0, y: 0, r1: 3, r2: 3, color: C.page, lineColor: C.tones.sage.accent, lineWidth: 1.2 }], relativePosition: { x: -14.6, y: 5.5 } },
@@ -123,7 +121,7 @@ function meals(list) {
       vLineWidth: i => (i === 1 ? 1 : 0),
       vLineColor: () => C.line,
       paddingLeft: i => (i === 1 ? 14 : 0),
-      paddingRight: i => (i === 0 ? 12 : 8),
+      paddingRight: i => (i === 0 ? 12 : 0),
       paddingTop: () => 6,
       paddingBottom: () => 6,
     },

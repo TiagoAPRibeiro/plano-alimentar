@@ -1,7 +1,7 @@
 import { defaultPlan, section, SECTION_PRESETS, NUTRITIONIST, COLORS, APP_VERSION } from './config.js';
 import { cleanHtml, isEmpty } from './richtext.js';
 import { iconSvg } from './icons.js';
-import { pairSections, sectionHasContent, parseMeals, mealHasContent, titleCase, mealTone } from './model.js';
+import { pairSections, sectionHasContent, parseMeals, mealHasContent, titleCase } from './model.js';
 import { openExport } from './export.js';
 import { prepPhoto } from './photo.js';
 
@@ -204,9 +204,9 @@ const MEALS_HINT = 'Cole aqui o plano tal como vem do software. A formatação �
 
 const MEALS_PLACEHOLDER = '6h30 Em jejum:\n- 1 copo de água\n\n6h45 Pequeno-almoço:\n- 1 cevada sem açúcar + ½ pão de massa mãe + queijo magro\n\n12h30 - 13h00 Almoço:\nPrato de sobremesa:\n- …';
 
-function renderMealView(m, i) {
+function renderMealView(m) {
   const items = m.items.filter(it => !isEmpty(it.text));
-  return h('article', { class: 'meal', 'data-line': m.line, style: `background:${mealTone(m, i)}` },
+  return h('article', { class: 'meal', 'data-line': m.line },
     h('div', { class: 'meal-left' },
       m.time ? h('div', { class: 'meal-time' }, m.time) : null,
       h('div', { class: 'meal-title', html: m.title })),
