@@ -167,12 +167,18 @@ function renderHeader() {
     type: 'date', class: cls, value: hd[key],
     oninput: e => { hd[key] = e.target.value; touch(); e.target.closest('.next')?.classList.toggle('empty', !e.target.value); },
   });
-  // maiúsculas iniciais aplicadas ao sair do campo, para não mexer no cursor enquanto se escreve
-  const objective = editable({ html: hd.objective, cls: 'objective-text', single: true, key: 'objective', ph: 'Ex.: Menopausa, ganho de massa muscular…', onInput: v => (hd.objective = v) });
-  objective.addEventListener('blur', () => {
-    const v = titleCase(hd.objective);
-    if (v !== hd.objective) { hd.objective = v; objective.innerHTML = v; }
-  });
+  // Nome e subtítulo com maiúsculas iniciais, aplicadas ao sair do campo
+  // para não mexer no cursor enquanto se escreve.
+  const titled = (key, opts) => {
+    const el = editable({ ...opts, html: hd[key], single: true, key, onInput: v => (hd[key] = v) });
+    el.addEventListener('blur', () => {
+      const v = titleCase(hd[key]);
+      if (v !== hd[key]) { hd[key] = v; el.innerHTML = v; }
+    });
+    return el;
+  };
+  const client = titled('client', { cls: 'client', ph: 'Nome do cliente' });
+  const objective = titled('objective', { cls: 'objective-text', ph: 'Ex.: Menopausa, ganho de massa muscular…' });
   return [
     h('header', { class: 'plan-head' },
       h('img', { class: 'logo', src: 'img/logo.png', alt: NUTRITIONIST.name }),
@@ -181,7 +187,7 @@ function renderHeader() {
         dateInput('date', 'date'),
         h('div', { class: 'client-row' },
           h('span', { class: 'client-label' }, 'Utente:'),
-          editable({ html: hd.client, cls: 'client', single: true, key: 'client', ph: 'Nome do cliente', onInput: v => (hd.client = v) })),
+          client),
         h('label', { class: `next ${hd.nextVisit ? '' : 'empty'}`, title: 'Opcional: se ficar vazio não aparece no PDF' },
           h('span', {}, 'Próxima consulta'), dateInput('nextVisit', 'next-date'),
           hd.nextVisit ? null : h('span', { class: 'hint' }, '(opcional)')),

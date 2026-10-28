@@ -7,7 +7,7 @@ Editor de planos alimentares que gera um PDF limpo e profissional, para enviar p
 ## Como funciona
 
 - A folha A4 edita-se diretamente; o que se vê corresponde ao PDF.
-- **Página 1**: cabeçalho ("Consulta de Nutrição", data, "Utente:" + nome, próxima consulta opcional), caixa "Plano Alimentar"
+- **Página 1**: cabeçalho ("Consulta de Nutrição", data, "Utente:" + nome com maiúsculas iniciais, próxima consulta opcional), caixa "Plano Alimentar"
   (título fixo, com o objetivo opcional por baixo, em maiúsculas iniciais) e refeições numa linha do tempo.
   As refeições são **uma caixa de texto livre**: cola-se o plano inteiro copiado do software da empresa e a app formata-o:
   - linha que começa por hora (`6h30 Em jejum:`, `12h30 - 13h00 Almoço:`) ou por um nome de refeição (`Ceia:`) → nova refeição;

@@ -50,7 +50,7 @@ function header(h) {
   ];
   if (h.date) right.push({ text: formatDate(h.date), fontSize: 9, color: C.muted, alignment: 'right', margin: [0, 6, 0, 0] });
   if (!isEmpty(h.client)) right.push({
-    text: [{ text: 'Utente: ', color: C.muted }, ...toRuns(h.client)],
+    text: [{ text: 'Utente: ', color: C.muted }, ...toRuns(titleCase(h.client))],
     fontSize: 13, color: C.ink, alignment: 'right', margin: [0, 3, 0, 0],
   });
   if (h.nextVisit) right.push({
@@ -242,7 +242,7 @@ export function docDefinition(state) {
     content.push(...rows);
   }
 
-  const client = toRuns(h.client).map(r => r.text).join('').trim();
+  const client = toRuns(titleCase(h.client)).map(r => r.text).join('').trim();
 
   return {
     pageSize: 'A4',
@@ -294,7 +294,7 @@ export async function pdfBlob(state) {
 }
 
 export function fileName(state) {
-  const client = toRuns(state.header.client).map(r => r.text).join('').trim();
+  const client = toRuns(titleCase(state.header.client)).map(r => r.text).join('').trim();
   const date = state.header.date || '';
   return ['Plano Alimentar', client, date].filter(Boolean).join(' - ').replace(/[\\/:*?"<>|]/g, '') + '.pdf';
 }
